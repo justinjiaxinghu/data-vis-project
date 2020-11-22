@@ -1,4 +1,4 @@
-var width = 1000;
+var width = 1500;
 var height = 3500;
 
 d3.csv("books.csv", function (csv) {
@@ -10,24 +10,19 @@ d3.csv("books.csv", function (csv) {
         if (!authors.includes(csv[i].Author)) {
             authors.push(csv[i].Author);
         }
-        csv[i].Price = Number(csv[i].Price);
-        csv[i].Year = Number(csv[i].Year);
-        csv[i].Genre = String(csv[i].Genre);
     }
-
-    // console.log(authors);
 
     var year_extent = d3.extent(csv, function (data) {
         return data.Year;
     })
 
-    // var author_extent = d3.extent(csv, function(data) {
-    //     return data.Author;
-    // })
+    var xRange = [];
+    for (var i = 0; i < 1200; i+=(1200/11)) {
+        xRange.push(i);
+    }
+    console.log(xRange);
 
-    // console.log(author_extent);
-
-    var xScale = d3.scaleLinear().domain(year_extent).range([0, 950]);
+    var xScale = d3.scaleOrdinal().domain(["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"]).range(xRange);
     var yScale = d3.scaleBand().domain(authors).range([3000, 0]);
 
     var xAxis = d3.axisBottom().scale(xScale);
