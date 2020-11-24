@@ -1,4 +1,4 @@
-var width = 1500;
+var width = 1200;
 var height = 3500;
 
 d3.csv("books.csv", function (csv) {
@@ -17,7 +17,7 @@ d3.csv("books.csv", function (csv) {
     })
 
     var xRange = [];
-    for (var i = 0; i < 1200; i+=(1200/11)) {
+    for (var i = 0; i < 900; i+=(900/11)) {
         xRange.push(i);
     }
     console.log(xRange);
