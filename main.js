@@ -1,20 +1,7 @@
 var width = 1200;
-var height = 3500;
+var height = 1000;
 
 d3.csv("books.csv", function (csv) {
-
-    // var authors = [];
-
-    // for (var i = 0; i < csv.length; i++) {
-    //     csv[i].Author = String(csv[i].Author);
-    //     if (!authors.includes(csv[i].Author)) {
-    //         authors.push(csv[i].Author);
-    //     }
-    // }
-
-    // var year_extent = d3.extent(csv, function (data) {
-    //     return data.Year;
-    // })
 
     /* split up x axis so that there's enough space for all 11 years */
     var xRange = [];
@@ -35,29 +22,44 @@ d3.csv("books.csv", function (csv) {
 
     console.log(testData);
 
-    var fictionYearMap = new Map();
-    var nonFictionYearMap = new Map();
+    var min = 1000; //min value for y axis
+    var max = 0;    //max value for y axis
+    var fictionYearMap = new Map();    //map of values for non fiction books, ie 2009 : 2
+    var nonFictionYearMap = new Map(); //map of values for fiction books, ie 2009 : 2
 
     var nonFictionKeys = Object.keys(testData["Non Fiction"]);
     for (var i = 0; i < nonFictionKeys.length; i++) {
         var currKey = nonFictionKeys[i];
-        nonFictionYearMap.set(currKey, testData["Non Fiction"][currKey].length);
+        var val = testData["Non Fiction"][currKey].length;
+        if (val < min) {
+            min = val;
+        }
+        if (val > max) {
+            max = val;
+        }
+        nonFictionYearMap.set(currKey, val);
     }
     console.log(nonFictionYearMap);
 
     var fictionKeys = Object.keys(testData["Fiction"]);
     for (var i = 0; i < fictionKeys.length; i++) {
         var currKey = fictionKeys[i];
-        fictionYearMap.set(currKey, testData["Fiction"][currKey].length);
+        var val = testData["Fiction"][currKey].length;
+        if (val < min) {
+            min = val;
+        }
+        if (val > max) {
+            max = val;
+        }
+        fictionYearMap.set(currKey, val);
     }
-    console.log(fictionYearMap);
 
     var xScale = d3.scaleOrdinal().domain(xDomain).range(xRange);
-    
-    /*todo change y scale*/
-    // var yScale = d3.scaleBand().domain(authors).range([3000, 0]);
-    // var yAxis = d3.axisLeft().scale(yScale);
     var xAxis = d3.axisBottom().scale(xScale);
+    
+    var yScale = d3.scaleLinear().domain([min - 3, max + 3]).range([500, 0]);
+    var yAxis = d3.axisLeft().scale(yScale);
+    
     
 
     var chart = d3
@@ -75,7 +77,7 @@ d3.csv("books.csv", function (csv) {
                     })
                     .attr("stroke", "black")
                     .attr("cx", function (d) {
-                        return xScale(d.Year) + 200;
+                        return xScale(d.Year) + 150;
                     })
                     .attr("cy", function (d) {
                         /* todo change to match preprocessed data */
@@ -87,7 +89,7 @@ d3.csv("books.csv", function (csv) {
     
     chart 
                     .append("g") 
-                    .attr("transform", "translate(200," + (3000) + ")")
+                    .attr("transform", "translate(150," + (550) + ")")
                     .call(xAxis) 
                     .append("text")
                     .attr("class", "label")
@@ -95,16 +97,15 @@ d3.csv("books.csv", function (csv) {
                     .attr("y", -6)
                     .style("text-anchor", "end");
 
-    /* this is y axis stuff, change when data is preprocessed */
-    // chart
-    //                 .append("g")
-    //                 .attr("transform", "translate(200, 0)")
-    //                 .call(yAxis)
-    //                 .append("text")
-    //                 .attr("class", "label")
-    //                 .attr("transform", "rotate(-90)")
-    //                 .attr("y", 6)
-    //                 .attr("dy", ".71em")
-    //                 .style("text-anchor", "end");
+    chart
+                    .append("g")
+                    .attr("transform", "translate(150, 50)")
+                    .call(yAxis)
+                    .append("text")
+                    .attr("class", "label")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 6)
+                    .attr("dy", ".71em")
+                    .style("text-anchor", "end");
 
 });
