@@ -73,7 +73,6 @@ d3.csv("books.csv", function (csv) {
         .attr("x", width - 16)
         .attr("y", -6)
         .style("text-anchor", "end");
-
     
     chart.append("g")
         .attr("transform", "translate(20, 50)")
@@ -92,7 +91,7 @@ d3.csv("books.csv", function (csv) {
     chart.append("path")
         .attr("class", "line")
         .attr("d", fictionLine(fictionYearMap)) //adding fiction line to chart
-        .attr("transform", "translate(20, 49)")
+        .attr("transform", "translate(20, 50)")
         .style('stroke', 'green') //setting the line color
         .style('fill', 'none');// setting the fill color
 
@@ -100,12 +99,46 @@ d3.csv("books.csv", function (csv) {
         .x(function(d) { return xScale(d.x);}) // mapping xscale to the x-axis
         .y(function(d) { return yScale(d.y);}) // mapping yscale to the y-axis
 
-    console.log(nonFictionYearMap)
-
     chart.append("path")
         .attr("class", "line")
         .attr("d", nonFictionLine(nonFictionYearMap)) //adding non fiction line to chart
-        .attr("transform", "translate(20, 52)")
+        .attr("transform", "translate(20, 50)")
         .style('stroke', 'black')
         .style('fill', 'none');
+
+    var fiction_circles = chart
+        .selectAll("#fiction_circles")
+        .data(fictionYearMap)
+        .enter()
+        .append("circle")
+        .attr("id", function (d,i) {
+            return i;
+        })
+        .attr("class", "fiction_circles")
+        .attr("fill", "green")
+        .attr("cx", function (d) {
+            return xScale(d.x) + 20;
+        })
+        .attr("cy", function (d) {
+            return yScale(d.y) + 50;
+        })
+        .attr("r", 3);
+
+    var non_fiction_circles = chart
+        .selectAll("#non_fiction_circles")
+        .data(nonFictionYearMap)
+        .enter()
+        .append("circle")
+        .attr("id", function (d,i) {
+            return i;
+        })
+        .attr("class", "non_fiction_circles")
+        .attr("fill", "black")
+        .attr("cx", function (d) {
+            return xScale(d.x) + 20;
+        })
+        .attr("cy", function (d) {
+            return yScale(d.y) + 50;
+        })
+        .attr("r", 3);
 });
