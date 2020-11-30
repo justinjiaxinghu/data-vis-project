@@ -129,7 +129,7 @@ d3.csv("books.csv", function (csv) {
         .attr("class", "line")
         .attr("d", fictionLine(fictionYearMap)) //adding fiction line to chart
         .attr("transform", "translate(20, 50)")
-        .style('stroke', 'green') //setting the line color
+        .style('stroke', 'red') //setting the line color
         .style('fill', 'none');// setting the fill color
 
     var nonFictionLine = d3.line()
@@ -140,7 +140,7 @@ d3.csv("books.csv", function (csv) {
         .attr("class", "line")
         .attr("d", nonFictionLine(nonFictionYearMap)) //adding non fiction line to chart
         .attr("transform", "translate(20, 50)")
-        .style('stroke', 'black')
+        .style('stroke', 'blue')
         .style('fill', 'none');
 
     var fiction_circles = chart
@@ -152,7 +152,7 @@ d3.csv("books.csv", function (csv) {
             return i;
         })
         .attr("class", "fiction_circles")
-        .attr("fill", "green")
+        .attr("fill", "red")
         .attr("cx", function (d) {
             return xScale(d.x) + 20;
         })
@@ -170,7 +170,7 @@ d3.csv("books.csv", function (csv) {
             return i;
         })
         .attr("class", "non_fiction_circles")
-        .attr("fill", "black")
+        .attr("fill", "blue")
         .attr("cx", function (d) {
             return xScale(d.x) + 20;
         })
@@ -212,7 +212,7 @@ d3.csv("books.csv", function (csv) {
                     .data(meanPricesMap)
                     .enter()
                     .append("rect")
-                    .attr("fill", "steelblue")
+                    .attr("fill", "#842db7")
                     .attr("x", function (d) {
                         return xScale(d.x) + 40;
                     })
@@ -226,8 +226,8 @@ d3.csv("books.csv", function (csv) {
 
 
     // Legend
-    chart.append("circle").attr("cx", 100).attr("cy",285).attr("r", 5).style("fill", "black")
-    chart.append("circle").attr("cx", 220).attr("cy",285).attr("r", 5).style("fill", "green")
+    chart.append("circle").attr("cx", 100).attr("cy",285).attr("r", 5).style("fill", "blue")
+    chart.append("circle").attr("cx", 220).attr("cy",285).attr("r", 5).style("fill", "red")
     chart.append("text").attr("x", 113).attr("y", 287).text("Non-Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
     chart.append("text").attr("x", 233).attr("y", 287).text("Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
     
