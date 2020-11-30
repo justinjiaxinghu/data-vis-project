@@ -27,6 +27,12 @@ d3.csv("books.csv", function (csv) {
     var fictionYearMap = [];    // array of values for non fiction books, ie 2009 : 2
     var nonFictionYearMap = []; // array of values for fiction books, ie 2009 : 2
 
+    var svg = d3.select("#main")
+	.select("svg")
+	.append("g")
+		.attr("transform",
+			"translate(20,10)");
+
 
     var nonFictionKeys = Object.keys(testData["Non Fiction"]); //map year to # of non fiction books
     for (var i = 0; i < nonFictionKeys.length; i++) {
@@ -217,5 +223,12 @@ d3.csv("books.csv", function (csv) {
                     .attr("height", function (d) {
                         return height - yScale2(d.y) - 100;
                     })
+
+
+    // Legend
+    chart.append("circle").attr("cx", 100).attr("cy",285).attr("r", 5).style("fill", "black")
+    chart.append("circle").attr("cx", 220).attr("cy",285).attr("r", 5).style("fill", "green")
+    chart.append("text").attr("x", 113).attr("y", 287).text("Non-Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
+    chart.append("text").attr("x", 233).attr("y", 287).text("Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
     
 });
