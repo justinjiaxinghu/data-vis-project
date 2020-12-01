@@ -260,16 +260,16 @@ d3.csv("books.csv", function (csv) {
 
                 if (Object.keys(topFiveBooks).length < 5) {
 
-                    topFiveBooks[name + " - " + author] = price
+                    topFiveBooks[name] = price
 
                     if (Object.keys(lowestBook).length == 0) {
                         lowestBook["Price"] = price
-                        lowestBook["Book"] = name + " - " + author
+                        lowestBook["Book"] = name
                     }
 
                     if (price < lowestBook["Price"]) {
                         lowestBook["Price"] = price
-                        lowestBook["Book"] = name + " - " + author
+                        lowestBook["Book"] = name
                     }
 
                 } else {
@@ -277,11 +277,11 @@ d3.csv("books.csv", function (csv) {
                     if (price > lowestBook["Price"]) {
 
                         delete topFiveBooks[lowestBook["Book"]]
-                        topFiveBooks[name + " - " + author] = price
+                        topFiveBooks[name] = price
 
                         lowestPrice = price
                         lowestBook["Price"] = price
-                        lowestBook["Book"] = name + " - " + author
+                        lowestBook["Book"] = name
 
                         for (b in topFiveBooks) {
                             if (topFiveBooks[b] < lowestPrice) {
