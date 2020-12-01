@@ -1,4 +1,4 @@
-var width = 600;
+var width = 1000;
 var height = 300;
 
 d3.csv("books.csv", function (csv) {
@@ -160,7 +160,7 @@ d3.csv("books.csv", function (csv) {
             return yScale(d.y) + 50;
         })
         .attr("r", 3)
-        .on("click", function(d, i) {
+        .on("mouseover", function(d, i) {
 
             year = d.x
             numberOfBooks = d.y
@@ -178,16 +178,16 @@ d3.csv("books.csv", function (csv) {
 
                 if (Object.keys(topFiveBooks).length < 5) {
 
-                    topFiveBooks[name + " - " + author] = price
+                    topFiveBooks[name] = price
 
                     if (Object.keys(lowestBook).length == 0) {
                         lowestBook["Price"] = price
-                        lowestBook["Book"] = name + " - " + author
+                        lowestBook["Book"] = name
                     }
 
                     if (price < lowestBook["Price"]) {
                         lowestBook["Price"] = price
-                        lowestBook["Book"] = name + " - " + author
+                        lowestBook["Book"] = name
                     }
 
                 } else {
@@ -195,11 +195,11 @@ d3.csv("books.csv", function (csv) {
                     if (price > lowestBook["Price"]) {
 
                         delete topFiveBooks[lowestBook["Book"]]
-                        topFiveBooks[name + " - " + author] = price
+                        topFiveBooks[name] = price
 
                         lowestPrice = price
                         lowestBook["Price"] = price
-                        lowestBook["Book"] = name + " - " + author
+                        lowestBook["Book"] = name
 
                         for (b in topFiveBooks) {
                             if (topFiveBooks[b] < lowestPrice) {
@@ -211,6 +211,18 @@ d3.csv("books.csv", function (csv) {
                     }
                 }
             }
+            var items = Object.keys(topFiveBooks).map(function(key) {
+                return [key, topFiveBooks[key]]
+            });
+            items.sort(function(first, second) {
+                return second[1] - first[1];
+            });
+            document.getElementById("topFiveBooksTitle").textContent = "Highest priced fiction books from " + year
+            document.getElementById("topFiveBooks1").textContent = "$" + items[0][1] + ": " + items[0][0]
+            document.getElementById("topFiveBooks2").textContent = "$" + items[1][1] + ": " + items[1][0]
+            document.getElementById("topFiveBooks3").textContent = "$" + items[2][1] + ": " + items[2][0]
+            document.getElementById("topFiveBooks4").textContent = "$" + items[3][1] + ": " + items[3][0]
+            document.getElementById("topFiveBooks5").textContent = "$" + items[4][1] + ": " + items[4][0]
         });
 
     var non_fiction_circles = chart
@@ -230,7 +242,7 @@ d3.csv("books.csv", function (csv) {
             return yScale(d.y) + 50;
         })
         .attr("r", 3)
-        .on("click", function(d, i) {
+        .on("mouseover", function(d, i) {
 
             year = d.x
             numberOfBooks = d.y
@@ -281,7 +293,26 @@ d3.csv("books.csv", function (csv) {
                     }
                 }
             }
+            var items = Object.keys(topFiveBooks).map(function(key) {
+                return [key, topFiveBooks[key]]
+            });
+            items.sort(function(first, second) {
+                return second[1] - first[1];
+            });
+            document.getElementById("topFiveBooksTitle").textContent = "Highest priced non-fiction books from " + year
+            document.getElementById("topFiveBooks1").textContent = "$" + items[0][1] + ": " + items[0][0]
+            document.getElementById("topFiveBooks2").textContent = "$" + items[1][1] + ": " + items[1][0]
+            document.getElementById("topFiveBooks3").textContent = "$" + items[2][1] + ": " + items[2][0]
+            document.getElementById("topFiveBooks4").textContent = "$" + items[3][1] + ": " + items[3][0]
+            document.getElementById("topFiveBooks5").textContent = "$" + items[4][1] + ": " + items[4][0]
         });
+
+        chart.append("text").attr("x", 520).attr("y", 50).attr("id", "topFiveBooksTitle").text("").style("font-size", "13px").style("font-weight", "bold").attr("alignment-baseline","middle")
+        chart.append("text").attr("x", 520).attr("y", 65).attr("id", "topFiveBooks1").text("").style("font-size", "13px").attr("alignment-baseline","middle")
+        chart.append("text").attr("x", 520).attr("y", 80).attr("id", "topFiveBooks2").text("").style("font-size", "13px").attr("alignment-baseline","middle")
+        chart.append("text").attr("x", 520).attr("y", 95).attr("id", "topFiveBooks3").text("").style("font-size", "13px").attr("alignment-baseline","middle")
+        chart.append("text").attr("x", 520).attr("y", 110).attr("id", "topFiveBooks4").text("").style("font-size", "13px").attr("alignment-baseline","middle")
+        chart.append("text").attr("x", 520).attr("y", 125).attr("id", "topFiveBooks5").text("").style("font-size", "13px").attr("alignment-baseline","middle")
 
     var chart2 = d3                         //mean prices bar chart
                     .select("#chart2")
