@@ -1,4 +1,4 @@
-var width = 1000;
+var width = 1300;
 var height = 300;
 
 d3.csv("books.csv", function (csv) {
