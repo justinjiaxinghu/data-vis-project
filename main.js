@@ -153,7 +153,25 @@ d3.csv("books.csv", function (csv) {
         .attr("cy", function (d) {
             return yScale(d.y) + 50;
         })
-        .attr("r", 3);
+        .attr("r", 3)
+        .on("click", function(d, i) {
+            //d.attr("fill", "blue")
+
+            // p = document.getElementById(i)
+
+            // //for data in testData:
+
+            // // console.log(d.x)
+            // // console.log(d.y)
+            // // console.log(testData["Fiction"][d.x])
+
+            // topFive = {}
+            // ficYearBooks = testData["Fiction"][d.x]
+            // console.log("hello")
+            // for (book in Object.keys(ficYearBooks)) {
+            // }
+
+        });
 
     var non_fiction_circles = chart
         .selectAll("#non_fiction_circles")
