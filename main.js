@@ -159,7 +159,59 @@ d3.csv("books.csv", function (csv) {
         .attr("cy", function (d) {
             return yScale(d.y) + 50;
         })
-        .attr("r", 3);
+        .attr("r", 3)
+        .on("click", function(d, i) {
+
+            year = d.x
+            numberOfBooks = d.y
+            ficYearBooks = testData["Fiction"][d.x]
+
+            topFiveBooks = {}
+            lowestBook = {}
+
+            for (i = 0; i < ficYearBooks.length; i++) {
+
+                book = ficYearBooks[i]
+                name = book["Name"]
+                author = book["Author"]
+                price = +book["Price"]
+
+                if (Object.keys(topFiveBooks).length < 5) {
+
+                    topFiveBooks[name + " - " + author] = price
+
+                    if (Object.keys(lowestBook).length == 0) {
+                        lowestBook["Price"] = price
+                        lowestBook["Book"] = name + " - " + author
+                    }
+
+                    if (price < lowestBook["Price"]) {
+                        lowestBook["Price"] = price
+                        lowestBook["Book"] = name + " - " + author
+                    }
+
+                } else {
+                    
+                    if (price > lowestBook["Price"]) {
+
+                        delete topFiveBooks[lowestBook["Book"]]
+                        topFiveBooks[name + " - " + author] = price
+
+                        lowestPrice = price
+                        lowestBook["Price"] = price
+                        lowestBook["Book"] = name + " - " + author
+
+                        for (b in topFiveBooks) {
+                            if (topFiveBooks[b] < lowestPrice) {
+                                lowestBook["Price"] = topFiveBooks[b]
+                                lowestBook["Book"] = b
+                                lowestPrice = topFiveBooks[b]
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
     var non_fiction_circles = chart
         .selectAll("#non_fiction_circles")
@@ -177,7 +229,59 @@ d3.csv("books.csv", function (csv) {
         .attr("cy", function (d) {
             return yScale(d.y) + 50;
         })
-        .attr("r", 3);
+        .attr("r", 3)
+        .on("click", function(d, i) {
+
+            year = d.x
+            numberOfBooks = d.y
+            nonficYearBooks = testData["Non Fiction"][d.x]
+
+            topFiveBooks = {}
+            lowestBook = {}
+
+            for (i = 0; i < nonficYearBooks.length; i++) {
+
+                book = nonficYearBooks[i]
+                name = book["Name"]
+                author = book["Author"]
+                price = +book["Price"]
+
+                if (Object.keys(topFiveBooks).length < 5) {
+
+                    topFiveBooks[name + " - " + author] = price
+
+                    if (Object.keys(lowestBook).length == 0) {
+                        lowestBook["Price"] = price
+                        lowestBook["Book"] = name + " - " + author
+                    }
+
+                    if (price < lowestBook["Price"]) {
+                        lowestBook["Price"] = price
+                        lowestBook["Book"] = name + " - " + author
+                    }
+
+                } else {
+                    
+                    if (price > lowestBook["Price"]) {
+
+                        delete topFiveBooks[lowestBook["Book"]]
+                        topFiveBooks[name + " - " + author] = price
+
+                        lowestPrice = price
+                        lowestBook["Price"] = price
+                        lowestBook["Book"] = name + " - " + author
+
+                        for (b in topFiveBooks) {
+                            if (topFiveBooks[b] < lowestPrice) {
+                                lowestBook["Price"] = topFiveBooks[b]
+                                lowestBook["Book"] = b
+                                lowestPrice = topFiveBooks[b]
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
     var chart2 = d3                         //mean prices bar chart
                     .select("#chart2")
