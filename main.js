@@ -223,6 +223,14 @@ d3.csv("books.csv", function (csv) {
             document.getElementById("topFiveBooks3").textContent = "$" + items[2][1] + ": " + items[2][0]
             document.getElementById("topFiveBooks4").textContent = "$" + items[3][1] + ": " + items[3][0]
             document.getElementById("topFiveBooks5").textContent = "$" + items[4][1] + ": " + items[4][0]
+        })
+        .on("mouseout", function(d, i) {
+            document.getElementById("topFiveBooksTitle").textContent = ""
+            document.getElementById("topFiveBooks1").textContent = ""
+            document.getElementById("topFiveBooks2").textContent = ""
+            document.getElementById("topFiveBooks3").textContent = ""
+            document.getElementById("topFiveBooks4").textContent = ""
+            document.getElementById("topFiveBooks5").textContent = ""
         });
 
     var non_fiction_circles = chart
@@ -305,7 +313,15 @@ d3.csv("books.csv", function (csv) {
             document.getElementById("topFiveBooks3").textContent = "$" + items[2][1] + ": " + items[2][0]
             document.getElementById("topFiveBooks4").textContent = "$" + items[3][1] + ": " + items[3][0]
             document.getElementById("topFiveBooks5").textContent = "$" + items[4][1] + ": " + items[4][0]
-        });
+        })
+        .on("mouseout", function(d, i) {
+            document.getElementById("topFiveBooksTitle").textContent = ""
+            document.getElementById("topFiveBooks1").textContent = ""
+            document.getElementById("topFiveBooks2").textContent = ""
+            document.getElementById("topFiveBooks3").textContent = ""
+            document.getElementById("topFiveBooks4").textContent = ""
+            document.getElementById("topFiveBooks5").textContent = ""
+        });;
 
         chart.append("text").attr("x", 520).attr("y", 50).attr("id", "topFiveBooksTitle").text("").style("font-size", "13px").style("font-weight", "bold").attr("alignment-baseline","middle")
         chart.append("text").attr("x", 520).attr("y", 65).attr("id", "topFiveBooks1").text("").style("font-size", "13px").attr("alignment-baseline","middle")
