@@ -218,11 +218,11 @@ d3.csv("books.csv", function (csv) {
                 return second[1] - first[1];
             });
             document.getElementById("topFiveBooksTitle").textContent = "Highest priced fiction books from " + year
-            document.getElementById("topFiveBooks1").textContent = "$" + items[0][1] + ": " + items[0][0]
-            document.getElementById("topFiveBooks2").textContent = "$" + items[1][1] + ": " + items[1][0]
-            document.getElementById("topFiveBooks3").textContent = "$" + items[2][1] + ": " + items[2][0]
-            document.getElementById("topFiveBooks4").textContent = "$" + items[3][1] + ": " + items[3][0]
-            document.getElementById("topFiveBooks5").textContent = "$" + items[4][1] + ": " + items[4][0]
+            document.getElementById("topFiveBooks1").textContent = "$" + items[0][1] + " - " + items[0][0]
+            document.getElementById("topFiveBooks2").textContent = "$" + items[1][1] + " - " + items[1][0]
+            document.getElementById("topFiveBooks3").textContent = "$" + items[2][1] + " - " + items[2][0]
+            document.getElementById("topFiveBooks4").textContent = "$" + items[3][1] + " - " + items[3][0]
+            document.getElementById("topFiveBooks5").textContent = "$" + items[4][1] + " - " + items[4][0]
         })
         .on("mouseout", function(d, i) {
             document.getElementById("topFiveBooksTitle").textContent = ""
@@ -308,11 +308,11 @@ d3.csv("books.csv", function (csv) {
                 return second[1] - first[1];
             });
             document.getElementById("topFiveBooksTitle").textContent = "Highest priced non-fiction books from " + year
-            document.getElementById("topFiveBooks1").textContent = "$" + items[0][1] + ": " + items[0][0]
-            document.getElementById("topFiveBooks2").textContent = "$" + items[1][1] + ": " + items[1][0]
-            document.getElementById("topFiveBooks3").textContent = "$" + items[2][1] + ": " + items[2][0]
-            document.getElementById("topFiveBooks4").textContent = "$" + items[3][1] + ": " + items[3][0]
-            document.getElementById("topFiveBooks5").textContent = "$" + items[4][1] + ": " + items[4][0]
+            document.getElementById("topFiveBooks1").textContent = "$" + items[0][1] + " - " + items[0][0]
+            document.getElementById("topFiveBooks2").textContent = "$" + items[1][1] + " - " + items[1][0]
+            document.getElementById("topFiveBooks3").textContent = "$" + items[2][1] + " - " + items[2][0]
+            document.getElementById("topFiveBooks4").textContent = "$" + items[3][1] + " - " + items[3][0]
+            document.getElementById("topFiveBooks5").textContent = "$" + items[4][1] + " - " + items[4][0]
         })
         .on("mouseout", function(d, i) {
             document.getElementById("topFiveBooksTitle").textContent = ""
