@@ -361,9 +361,9 @@ d3.csv("books.csv", function (csv) {
 
 
     // Legend
-    chart.append("circle").attr("cx", 100).attr("cy",285).attr("r", 5).style("fill", "blue")
-    chart.append("circle").attr("cx", 220).attr("cy",285).attr("r", 5).style("fill", "red")
-    chart.append("text").attr("x", 113).attr("y", 287).text("Non-Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
-    chart.append("text").attr("x", 233).attr("y", 287).text("Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
+    chart.append("circle").attr("cx", 550).attr("cy",170).attr("r", 5).style("fill", "blue")
+    chart.append("circle").attr("cx", 550).attr("cy",190).attr("r", 5).style("fill", "red")
+    chart.append("text").attr("x", 570).attr("y", 170).text("Non-Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
+    chart.append("text").attr("x", 570).attr("y", 190).text("Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
     
 });
