@@ -454,6 +454,15 @@ function generateGraphs() {
             newFilterData1();
             generateGraphs();
         });
+    d3.select(filter1)
+        .append('p')
+        .append('button')
+            .style("border", "1px solid black")
+        .text('Reset Filter')
+        .on('click', function() {
+            resetData();
+            generateGraphs();
+        });
     d3.select(filter2)
         .append('p')
         .append('button')
@@ -462,6 +471,15 @@ function generateGraphs() {
         .on('click', function() { 
             resetData2();
             newFilterData2();
+            generateGraphs();
+        });
+    d3.select(filter2)
+        .append('p')
+        .append('button')
+            .style("border", "1px solid black")
+        .text('Reset Filter')
+        .on('click', function() {
+            resetData2();
             generateGraphs();
         });
 });
