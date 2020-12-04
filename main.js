@@ -2,7 +2,7 @@ var width = 1300;
 var height = 300;
 
 d3.csv("books.csv", function (csv) {
-    
+
     /* split up x axis so that there's enough space for all 11 years */
     var xRange = [];
     for (var i = 0; i < 500; i+=(500/11)) {
@@ -21,11 +21,21 @@ d3.csv("books.csv", function (csv) {
                             return d.Year;
                         })
                         .object(csv);
+    var mean_prices = d3                                //get mean prices
+                        .nest()
+                        .key(function(d) { return d.Year})
+                        .rollup(function (d) { 
+                            return d3.mean(d, function(d_1) { 
+                                console.log(d_1.Price);
+                                return d_1.Price}
+                            )
+                        })
+                        .object(csv);
 
     var min = 1000; // min value for y axis
     var max = 0;    // max value for y axis
-    var fictionYearMap = [];    // array of values for non fiction books, ie 2009 : 2
-    var nonFictionYearMap = []; // array of values for fiction books, ie 2009 : 2
+    var chart;
+    var chart2;
 
     var svg = d3.select("#main")
 	.select("svg")
@@ -33,7 +43,12 @@ d3.csv("books.csv", function (csv) {
 		.attr("transform",
 			"translate(20,10)");
 
-
+function generateGraphs() {
+    chart = d3.select("svg").remove();
+    chart2 = d3.select("svg").remove();
+    var fictionYearMap = [];    // array of values for non fiction books, ie 2009 : 2
+    var nonFictionYearMap = []; // array of values for fiction books, ie 2009 : 2
+    var meanPricesMap = [];
     var nonFictionKeys = Object.keys(testData["Non Fiction"]); //map year to # of non fiction books
     for (var i = 0; i < nonFictionKeys.length; i++) {
         var currKey = nonFictionKeys[i];
@@ -60,20 +75,10 @@ d3.csv("books.csv", function (csv) {
         fictionYearMap.push({x : currKey, y : val});
     }
 
-    var mean_prices = d3                                //get mean prices
-                        .nest()
-                        .key(function(d) { return d.Year})
-                        .rollup(function (d) { 
-                            return d3.mean(d, function(d_1) { 
-                                return d_1.Price}
-                            )
-                        })
-                        .object(csv);
     
     //min and max values for mean y axis 
     var min_mean = 1000;
     var max_mean = 0;
-    var meanPricesMap = [];
     for (var i = 0; i < xDomain.length; i++) {
         if (mean_prices[xDomain[i]] < min_mean) {
             min_mean = Math.round(mean_prices[xDomain[i]]);
@@ -94,33 +99,29 @@ d3.csv("books.csv", function (csv) {
     var yAxis = d3.axisLeft().scale(yScale);
 
     var yScale2 = d3.scaleLinear().domain([0, max_mean + 3]).range([200, 20]);
-    var yAxis2 = d3.axisLeft().scale(yScale2);
-
-    var chart = d3.select("#chart")
+    var yAxis2 = d3.axisLeft().scale(yScale2); 
+    chart = d3.select("#chart")
                     .append("svg")
                     .attr("width", width)
                     .attr("height", height)
                     .attr("transform", "translate(20, 10)")
-    
-    chart.append("g") 
-        .attr("transform", "translate(20, 250)")
-        .call(xAxis) 
-        .append("text")
-        .attr("class", "label")
-        .attr("x", width - 16)
-        .attr("y", -6)
-        .style("text-anchor", "end");
-    
-    chart.append("g")
-        .attr("transform", "translate(20, 50)")
-        .call(yAxis)
-        .append("text")
-        .attr("class", "label")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end");
-
+               chart.append("g") 
+                    .attr("transform", "translate(20, 250)")
+                    .call(xAxis) 
+                    .append("text")
+                    .attr("class", "label")
+                    .attr("x", width - 16)
+                    .attr("y", -6)
+                    .style("text-anchor", "end");
+               chart.append("g")
+                    .attr("transform", "translate(20, 50)")
+                    .call(yAxis)
+                    .append("text")
+                    .attr("class", "label")
+                    .attr("transform", "rotate(-90)")
+                    .attr("y", 6)
+                    .attr("dy", ".71em")
+                    .style("text-anchor", "end");
     var fictionLine = d3.line()
         .x(function(d) { return xScale(d.x);}) // mapping xscale to the data on x-axis
         .y(function(d) { return yScale(d.y);}) // mapping yscale to the data on y-axis
@@ -131,7 +132,6 @@ d3.csv("books.csv", function (csv) {
         .attr("transform", "translate(20, 50)")
         .style('stroke', 'red') //setting the line color
         .style('fill', 'none');// setting the fill color
-
     var nonFictionLine = d3.line()
         .x(function(d) { return xScale(d.x);}) // mapping xscale to the x-axis
         .y(function(d) { return yScale(d.y);}) // mapping yscale to the y-axis
@@ -141,7 +141,9 @@ d3.csv("books.csv", function (csv) {
         .attr("d", nonFictionLine(nonFictionYearMap)) //adding non fiction line to chart
         .attr("transform", "translate(20, 50)")
         .style('stroke', 'blue')
-        .style('fill', 'none');
+        .style('fill', 'none')
+        .transition()
+        
 
     var fiction_circles = chart
         .selectAll("#fiction_circles")
@@ -330,7 +332,7 @@ d3.csv("books.csv", function (csv) {
         chart.append("text").attr("x", 520).attr("y", 110).attr("id", "topFiveBooks4").text("").style("font-size", "13px").attr("alignment-baseline","middle")
         chart.append("text").attr("x", 520).attr("y", 125).attr("id", "topFiveBooks5").text("").style("font-size", "13px").attr("alignment-baseline","middle")
 
-    var chart2 = d3                         //mean prices bar chart
+    chart2 = d3                         //mean prices bar chart
                     .select("#chart2")
                     .append("svg")
                     .attr("width", width)
@@ -376,23 +378,81 @@ d3.csv("books.csv", function (csv) {
                     .attr("height", function (d) {
                         return height - yScale2(d.y) - 100;
                     })
-
-
-    // Legend
-    chart.append("circle").attr("cx", 550).attr("cy",170).attr("r", 5).style("fill", "blue")
-    chart.append("circle").attr("cx", 550).attr("cy",190).attr("r", 5).style("fill", "red")
-    chart.append("text").attr("x", 570).attr("y", 170).text("Non-Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
-    chart.append("text").attr("x", 570).attr("y", 190).text("Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
+     // Legend
+     chart.append("circle").attr("cx", 550).attr("cy",170).attr("r", 5).style("fill", "blue")
+     chart.append("circle").attr("cx", 550).attr("cy",190).attr("r", 5).style("fill", "red")
+     chart.append("text").attr("x", 570).attr("y", 170).text("Non-Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
+     chart.append("text").attr("x", 570).attr("y", 190).text("Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
+};
+    generateGraphs();
     
     var filter1 = document.getElementById('filter1');
     var filter2 = document.getElementById('filter2');
-    
+    function resetData() {
+        var resetData = d3
+                        .nest()
+                        .key(function (d) {
+                            return d.Genre;
+                        })
+                        .key(function (d) {
+                            return d.Year;
+                        })
+                        .object(csv);
+        testData = resetData;
+    }
+    function resetData2() {
+        var new_mean_prices = d3                                //get mean prices
+                        .nest()
+                        .key(function(d) { return d.Year})
+                        .rollup(function (d) { 
+                            return d3.mean(d, function(d_1) { 
+                                return d_1.Price;
+                            })
+                        })
+                        .object(csv);
+        mean_prices = new_mean_prices
+    }
+    function newFilterData1() {
+        var filterData = d3
+                        .nest()
+                        .key(function (d) {
+                            if (Number(d.Price) <= document.getElementById('bookPriceValue').value) {
+                                return d.Genre;
+                            }
+                        })
+                        .key(function (d) {
+                            if (Number(d.Price) <= document.getElementById('bookPriceValue').value) {
+                                return d.Year;
+                            }
+                        })
+                        .object(csv);
+        testData = filterData;
+    }
+    function newFilterData2() {
+        var new_mean_prices = d3                                //get mean prices
+                        .nest()
+                        .key(function(d) {
+                            if (Number(d.Price) <= document.getElementById('bookMeanValue').value) { 
+                                return d.Year
+                            }
+                        })
+                        .rollup(function (d) { 
+                            return d3.mean(d, function(d_1) { 
+                                return d_1.Price;
+                            })
+                        })
+                        .object(csv);
+        mean_prices = new_mean_prices
+    }
     d3.select(filter1)
         .append('p')
         .append('button')
             .style("border", "1px solid black")
         .text('Filter Data')
         .on('click', function() {
+            resetData();
+            newFilterData1();
+            generateGraphs();
         });
     d3.select(filter2)
         .append('p')
@@ -400,18 +460,8 @@ d3.csv("books.csv", function (csv) {
             .style('border', '1px solid black')
         .text('Filter Data')
         .on('click', function() { 
-            chart2.selectAll('.bar')
-            
-            .filter(function(d) {
-                return d.y >= document.getElementById('bookMeanValue').value;
-            })
-            .transition()
-            .attr("y", function (d) {
-                return yScale2(0);
-            })
-            .attr('height', function(d) {
-                return height - yScale2(0) - 100;
-            })
-            .attr('fill', 'steelblue');
+            resetData2();
+            newFilterData2();
+            generateGraphs();
         });
 });
