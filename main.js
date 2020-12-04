@@ -90,10 +90,10 @@ d3.csv("books.csv", function (csv) {
     var xScale = d3.scaleOrdinal().domain(xDomain).range(xRange);
     var xAxis = d3.axisBottom().scale(xScale);
     
-    var yScale = d3.scaleLinear().domain([min - 3, max + 3]).range([200, 0]);
+    var yScale = d3.scaleLinear().domain([0, max + 3]).range([200, 0]);
     var yAxis = d3.axisLeft().scale(yScale);
 
-    var yScale2 = d3.scaleLinear().domain([min_mean - 3, max_mean + 3]).range([200, 0]);
+    var yScale2 = d3.scaleLinear().domain([0, max_mean + 3]).range([200, 20]);
     var yAxis2 = d3.axisLeft().scale(yScale2);
 
     var chart = d3.select("#chart")
@@ -339,7 +339,7 @@ d3.csv("books.csv", function (csv) {
     
     chart2
                     .append("g") 
-                    .attr("transform", "translate(50, 250)")
+                    .attr("transform", "translate(50, 200)")
                     .call(xAxis) 
                     .append("text")
                     .attr("class", "label")
@@ -349,7 +349,7 @@ d3.csv("books.csv", function (csv) {
 
     chart2
                     .append("g")
-                    .attr("transform", "translate(20, 50)")
+                    .attr("transform", "translate(20, 0)")
                     .call(yAxis2)
                     .append("text")
                     .attr("class", "label")
@@ -359,16 +359,18 @@ d3.csv("books.csv", function (csv) {
                     .style("text-anchor", "end");
 
     chart2
+    
                     .selectAll(".bar")
                     .data(meanPricesMap)
                     .enter()
                     .append("rect")
+                    .attr("class", "bar")
                     .attr("fill", "#842db7")
                     .attr("x", function (d) {
                         return xScale(d.x) + 40;
                     })
                     .attr("y", function (d) {
-                        return yScale2(d.y) + 50;
+                        return yScale2(d.y);
                     })
                     .attr("width", 20)
                     .attr("height", function (d) {
@@ -382,4 +384,34 @@ d3.csv("books.csv", function (csv) {
     chart.append("text").attr("x", 570).attr("y", 170).text("Non-Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
     chart.append("text").attr("x", 570).attr("y", 190).text("Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
     
+    var filter1 = document.getElementById('filter1');
+    var filter2 = document.getElementById('filter2');
+    
+    d3.select(filter1)
+        .append('p')
+        .append('button')
+            .style("border", "1px solid black")
+        .text('Filter Data')
+        .on('click', function() {
+        });
+    d3.select(filter2)
+        .append('p')
+        .append('button')
+            .style('border', '1px solid black')
+        .text('Filter Data')
+        .on('click', function() { 
+            chart2.selectAll('.bar')
+            
+            .filter(function(d) {
+                return d.y >= document.getElementById('bookMeanValue').value;
+            })
+            .transition()
+            .attr("y", function (d) {
+                return yScale2(0);
+            })
+            .attr('height', function(d) {
+                return height - yScale2(0) - 100;
+            })
+            .attr('fill', 'steelblue');
+        });
 });
