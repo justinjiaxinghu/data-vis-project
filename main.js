@@ -448,17 +448,6 @@ d3.csv("books.csv", function(csv) {
       .style("font-size", "12px")
       .text("Mean Price (USD)");
 
-<<<<<<< Updated upstream
-    d3.select(filter2)
-        .append('p')
-        .append('button')
-            .style("border", "1px solid black")
-        .text('Reset Filter')
-        .on('click', function() {
-            resetData2();
-            generateGraphs();
-        });
-=======
     chart2
       .selectAll(".bar")
       .data(meanPricesMap)
@@ -597,5 +586,4 @@ d3.csv("books.csv", function(csv) {
       resetData2();
       generateGraphs();
     });
->>>>>>> Stashed changes
 });
