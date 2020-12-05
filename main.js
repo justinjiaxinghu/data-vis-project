@@ -193,7 +193,7 @@ function generateGraphs() {
                 book = ficYearBooks[i]
                 name = book["Name"]
                 author = book["Author"]
-                price = +book["Price"]
+                price = +book["User Rating"]
 
                 //add first 5 books to top5 list
                 if (Object.keys(topFiveBooks).length < 5) {
@@ -201,30 +201,30 @@ function generateGraphs() {
                     topFiveBooks[name] = price
 
                     if (Object.keys(lowestBook).length == 0) {
-                        lowestBook["Price"] = price
+                        lowestBook["User Rating"] = price
                         lowestBook["Book"] = name
                     }
 
-                    if (price < lowestBook["Price"]) {
-                        lowestBook["Price"] = price
+                    if (price < lowestBook["User Rating"]) {
+                        lowestBook["User Rating"] = price
                         lowestBook["Book"] = name
                     }
 
                 //swap out lowest books for higher priced books
                 } else {
                     
-                    if (price > lowestBook["Price"]) {
+                    if (price > lowestBook["User Rating"]) {
 
                         delete topFiveBooks[lowestBook["Book"]]
                         topFiveBooks[name] = price
 
                         lowestPrice = price
-                        lowestBook["Price"] = price
+                        lowestBook["User Rating"] = price
                         lowestBook["Book"] = name
 
                         for (b in topFiveBooks) {
                             if (topFiveBooks[b] < lowestPrice) {
-                                lowestBook["Price"] = topFiveBooks[b]
+                                lowestBook["User Rating"] = topFiveBooks[b]
                                 lowestBook["Book"] = b
                                 lowestPrice = topFiveBooks[b]
                             }
@@ -240,6 +240,7 @@ function generateGraphs() {
             items.sort(function(first, second) {
                 return second[1] - first[1];
             });
+<<<<<<< HEAD
 
             //create text for top5 books
             document.getElementById("topFiveBooksTitle").textContent = "Highest priced fiction books from " + year
@@ -248,6 +249,14 @@ function generateGraphs() {
             document.getElementById("topFiveBooks3").textContent = "$" + items[2][1] + " - " + items[2][0]
             document.getElementById("topFiveBooks4").textContent = "$" + items[3][1] + " - " + items[3][0]
             document.getElementById("topFiveBooks5").textContent = "$" + items[4][1] + " - " + items[4][0]
+=======
+            document.getElementById("topFiveBooksTitle").textContent = "Highest rated fiction books from " + year
+            document.getElementById("topFiveBooks1").textContent = items[0][1] + " - " + items[0][0]
+            document.getElementById("topFiveBooks2").textContent = items[1][1] + " - " + items[1][0]
+            document.getElementById("topFiveBooks3").textContent = items[2][1] + " - " + items[2][0]
+            document.getElementById("topFiveBooks4").textContent = items[3][1] + " - " + items[3][0]
+            document.getElementById("topFiveBooks5").textContent = items[4][1] + " - " + items[4][0]
+>>>>>>> main
         })
 
         //text disappears when not hovering over dot
@@ -297,7 +306,7 @@ function generateGraphs() {
                 book = nonficYearBooks[i]
                 name = book["Name"]
                 author = book["Author"]
-                price = +book["Price"]
+                price = +book["User Rating"]
 
                 //add first 5 books to top5 list
                 if (Object.keys(topFiveBooks).length < 5) {
@@ -305,30 +314,30 @@ function generateGraphs() {
                     topFiveBooks[name] = price
 
                     if (Object.keys(lowestBook).length == 0) {
-                        lowestBook["Price"] = price
+                        lowestBook["User Rating"] = price
                         lowestBook["Book"] = name
                     }
 
                     if (price < lowestBook["Price"]) {
-                        lowestBook["Price"] = price
+                        lowestBook["User Rating"] = price
                         lowestBook["Book"] = name
                     }
 
                 //swap out lowest books for higher priced books
                 } else {
                     
-                    if (price > lowestBook["Price"]) {
+                    if (price > lowestBook["User Rating"]) {
 
                         delete topFiveBooks[lowestBook["Book"]]
                         topFiveBooks[name] = price
 
                         lowestPrice = price
-                        lowestBook["Price"] = price
+                        lowestBook["User Rating"] = price
                         lowestBook["Book"] = name
 
                         for (b in topFiveBooks) {
                             if (topFiveBooks[b] < lowestPrice) {
-                                lowestBook["Price"] = topFiveBooks[b]
+                                lowestBook["User Rating"] = topFiveBooks[b]
                                 lowestBook["Book"] = b
                                 lowestPrice = topFiveBooks[b]
                             }
@@ -344,6 +353,7 @@ function generateGraphs() {
             items.sort(function(first, second) {
                 return second[1] - first[1];
             });
+<<<<<<< HEAD
 
             //create text for top5 books
             document.getElementById("topFiveBooksTitle").textContent = "Highest priced non-fiction books from " + year
@@ -352,6 +362,14 @@ function generateGraphs() {
             document.getElementById("topFiveBooks3").textContent = "$" + items[2][1] + " - " + items[2][0]
             document.getElementById("topFiveBooks4").textContent = "$" + items[3][1] + " - " + items[3][0]
             document.getElementById("topFiveBooks5").textContent = "$" + items[4][1] + " - " + items[4][0]
+=======
+            document.getElementById("topFiveBooksTitle").textContent = "Highest rated non-fiction books from " + year
+            document.getElementById("topFiveBooks1").textContent = items[0][1] + " - " + items[0][0]
+            document.getElementById("topFiveBooks2").textContent = items[1][1] + " - " + items[1][0]
+            document.getElementById("topFiveBooks3").textContent = items[2][1] + " - " + items[2][0]
+            document.getElementById("topFiveBooks4").textContent = items[3][1] + " - " + items[3][0]
+            document.getElementById("topFiveBooks5").textContent = items[4][1] + " - " + items[4][0]
+>>>>>>> main
         })
 
         //text disappears when not hovering over dot
