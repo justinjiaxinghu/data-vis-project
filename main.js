@@ -178,7 +178,7 @@ function generateGraphs() {
         })
         .attr("class", "fiction_circles")
         .attr("fill", "red")
-        .on("mouseover", function(d, i) {
+        .on("mouseover", function(d, i) { // hover event to display top 5 rated books
 
             year = d.x
             numberOfBooks = d.y
@@ -187,54 +187,61 @@ function generateGraphs() {
             topFiveBooks = {}
             lowestBook = {}
 
+            // loop through fiction books
             for (i = 0; i < ficYearBooks.length; i++) {
 
                 book = ficYearBooks[i]
                 name = book["Name"]
                 author = book["Author"]
-                price = +book["User Rating"]
+                rating = +book["User Rating"]
 
+                // add first 5 books to top5 list
                 if (Object.keys(topFiveBooks).length < 5) {
 
-                    topFiveBooks[name] = price
+                    topFiveBooks[name] = rating
 
                     if (Object.keys(lowestBook).length == 0) {
-                        lowestBook["User Rating"] = price
+                        lowestBook["User Rating"] = rating
                         lowestBook["Book"] = name
                     }
 
-                    if (price < lowestBook["User Rating"]) {
-                        lowestBook["User Rating"] = price
+                    if (rating < lowestBook["User Rating"]) {
+                        lowestBook["User Rating"] = rating
                         lowestBook["Book"] = name
                     }
 
+                // swap out lowest rated book for higher rated book in top5 if available
                 } else {
                     
-                    if (price > lowestBook["User Rating"]) {
+                    if (rating > lowestBook["User Rating"]) {
 
                         delete topFiveBooks[lowestBook["Book"]]
-                        topFiveBooks[name] = price
+                        topFiveBooks[name] = rating
 
-                        lowestPrice = price
-                        lowestBook["User Rating"] = price
+                        lowestRating = rating
+                        lowestBook["User Rating"] = rating
                         lowestBook["Book"] = name
 
                         for (b in topFiveBooks) {
-                            if (topFiveBooks[b] < lowestPrice) {
+                            if (topFiveBooks[b] < lowestRating) {
                                 lowestBook["User Rating"] = topFiveBooks[b]
                                 lowestBook["Book"] = b
-                                lowestPrice = topFiveBooks[b]
+                                lowestRating = topFiveBooks[b]
                             }
                         }
                     }
                 }
             }
+
+            // sort top5 list
             var items = Object.keys(topFiveBooks).map(function(key) {
                 return [key, topFiveBooks[key]]
             });
             items.sort(function(first, second) {
                 return second[1] - first[1];
             });
+
+            // add text for book rating
             document.getElementById("topFiveBooksTitle").textContent = "Highest rated fiction books from " + year
             document.getElementById("topFiveBooks1").textContent = items[0][1] + " - " + items[0][0]
             document.getElementById("topFiveBooks2").textContent = items[1][1] + " - " + items[1][0]
@@ -242,6 +249,8 @@ function generateGraphs() {
             document.getElementById("topFiveBooks4").textContent = items[3][1] + " - " + items[3][0]
             document.getElementById("topFiveBooks5").textContent = items[4][1] + " - " + items[4][0]
         })
+
+        // event for when hover over dot ends
         .on("mouseout", function(d, i) {
             document.getElementById("topFiveBooksTitle").textContent = ""
             document.getElementById("topFiveBooks1").textContent = ""
@@ -273,7 +282,7 @@ function generateGraphs() {
         })
         .attr("class", "non_fiction_circles")
         .attr("fill", "blue")
-        .on("mouseover", function(d, i) {
+        .on("mouseover", function(d, i) { // hover event to display top 5 rated books
 
             year = d.x
             numberOfBooks = d.y
@@ -282,54 +291,61 @@ function generateGraphs() {
             topFiveBooks = {}
             lowestBook = {}
 
+            // loop through non-fiction books
             for (i = 0; i < nonficYearBooks.length; i++) {
 
                 book = nonficYearBooks[i]
                 name = book["Name"]
                 author = book["Author"]
-                price = +book["User Rating"]
+                rating = +book["User Rating"]
 
+                // add first 5 books to top5 list
                 if (Object.keys(topFiveBooks).length < 5) {
 
-                    topFiveBooks[name] = price
+                    topFiveBooks[name] = rating
 
                     if (Object.keys(lowestBook).length == 0) {
-                        lowestBook["User Rating"] = price
+                        lowestBook["User Rating"] = rating
                         lowestBook["Book"] = name
                     }
 
-                    if (price < lowestBook["Price"]) {
-                        lowestBook["User Rating"] = price
+                    if (rating < lowestBook["User Rating"]) {
+                        lowestBook["User Rating"] = rating
                         lowestBook["Book"] = name
                     }
 
+                // swap out lowest rated book for higher rated book in top5 if available
                 } else {
                     
-                    if (price > lowestBook["User Rating"]) {
+                    if (rating > lowestBook["User Rating"]) {
 
                         delete topFiveBooks[lowestBook["Book"]]
-                        topFiveBooks[name] = price
+                        topFiveBooks[name] = rating
 
-                        lowestPrice = price
-                        lowestBook["User Rating"] = price
+                        lowestRating = rating
+                        lowestBook["User Rating"] = rating
                         lowestBook["Book"] = name
 
                         for (b in topFiveBooks) {
-                            if (topFiveBooks[b] < lowestPrice) {
+                            if (topFiveBooks[b] < lowestRating) {
                                 lowestBook["User Rating"] = topFiveBooks[b]
                                 lowestBook["Book"] = b
-                                lowestPrice = topFiveBooks[b]
+                                lowestRating = topFiveBooks[b]
                             }
                         }
                     }
                 }
             }
+
+            // sort top5 list
             var items = Object.keys(topFiveBooks).map(function(key) {
                 return [key, topFiveBooks[key]]
             });
             items.sort(function(first, second) {
                 return second[1] - first[1];
             });
+
+            // add text for book rating
             document.getElementById("topFiveBooksTitle").textContent = "Highest rated non-fiction books from " + year
             document.getElementById("topFiveBooks1").textContent = items[0][1] + " - " + items[0][0]
             document.getElementById("topFiveBooks2").textContent = items[1][1] + " - " + items[1][0]
@@ -337,6 +353,8 @@ function generateGraphs() {
             document.getElementById("topFiveBooks4").textContent = items[3][1] + " - " + items[3][0]
             document.getElementById("topFiveBooks5").textContent = items[4][1] + " - " + items[4][0]
         })
+
+        // event for when hover over dot ends
         .on("mouseout", function(d, i) {
             document.getElementById("topFiveBooksTitle").textContent = ""
             document.getElementById("topFiveBooks1").textContent = ""
@@ -357,6 +375,7 @@ function generateGraphs() {
                             })
                             .attr("r", 3);
 
+        // adding text for top5 list
         chart.append("text").attr("x", 600).attr("y", 30).attr("id", "topFiveBooksTitle").text("").style("font-size", "13px").style("font-weight", "bold").attr("alignment-baseline","middle")
         chart.append("text").attr("x", 600).attr("y", 45).attr("id", "topFiveBooks1").text("").style("font-size", "13px").attr("alignment-baseline","middle")
         chart.append("text").attr("x", 600).attr("y", 60).attr("id", "topFiveBooks2").text("").style("font-size", "13px").attr("alignment-baseline","middle")
