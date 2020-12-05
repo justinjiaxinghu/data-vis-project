@@ -36,8 +36,8 @@ d3.csv("books.csv", function (csv) {
 
     var min = 1000; // min value for y axis
     var max = 0;    // max value for y axis
-    var chart;
-    var chart2;
+    var chart;      // line graph
+    var chart2;     // bar graph
 
     var svg = d3.select("#main")
 	.select("svg")
@@ -45,6 +45,7 @@ d3.csv("books.csv", function (csv) {
 		.attr("transform",
 			"translate(20,10)");
 
+//function to populate line and bar graphs
 function generateGraphs() {
     chart = d3.select("svg").remove();
     chart2 = d3.select("svg").remove();
@@ -52,6 +53,7 @@ function generateGraphs() {
     var nonFictionYearMap = []; // array of values for fiction books, ie 2009 : 2
     var meanPricesMap = [];
     var nonFictionKeys = Object.keys(testData["Non Fiction"]); //map year to # of non fiction books
+
     for (var i = 0; i < nonFictionKeys.length; i++) {
         var currKey = nonFictionKeys[i];
         var val = testData["Non Fiction"][currKey].length;
@@ -77,11 +79,11 @@ function generateGraphs() {
         fictionYearMap.push({x : currKey, y : val});
     }
 
-    
     //min and max values for mean y axis 
     var min_mean = 1000;
     var max_mean = 0;
-    for (var i = 0; i < xDomain.length; i++) {
+
+    for (var i = 0; i < xDomain.length; i++) { //map year to mean prices of books 
         if (mean_prices[xDomain[i]] < min_mean) {
             min_mean = Math.round(mean_prices[xDomain[i]]);
         }
@@ -91,12 +93,15 @@ function generateGraphs() {
         meanPricesMap.push({x : xDomain[i], y : mean_prices[xDomain[i]]});
     }
 
-    var xScale = d3.scaleOrdinal().domain(xDomain).range(xRange);
+    //year x axis information
+    var xScale = d3.scaleOrdinal().domain(xDomain).range(xRange); 
     var xAxis = d3.axisBottom().scale(xScale);
     
+    //line graph y axis information
     var yScale = d3.scaleLinear().domain([0, max + 3]).range([200, 0]);
     var yAxis = d3.axisLeft().scale(yScale);
 
+    //bar graph y axies information
     var yScale2 = d3.scaleLinear().domain([0, max_mean + 3]).range([200, 20]);
     var yAxis2 = d3.axisLeft().scale(yScale2); 
 
@@ -162,7 +167,7 @@ function generateGraphs() {
         .style('stroke', 'blue')
         .style('fill', 'none');
         
-
+    // generating circles for vertices of fiction books of line chart
     var fiction_circles = chart
         .selectAll("#fiction_circles")
         .data(fictionYearMap)
@@ -257,6 +262,7 @@ function generateGraphs() {
                     })
                     .attr("r", 3)
 
+    // generating circles for vertices of non fiction part of line graph 
     var non_fiction_circles = chart
         .selectAll("#non_fiction_circles")
         .data(nonFictionYearMap)
@@ -432,6 +438,8 @@ function generateGraphs() {
     
     var filter1 = document.getElementById('filter1');
     var filter2 = document.getElementById('filter2');
+
+    //resets data to original information (line graph)
     function resetData() {
         var resetData = d3
                         .nest()
@@ -444,6 +452,8 @@ function generateGraphs() {
                         .object(csv);
         testData = resetData;
     }
+
+    //resets data to original information (bar chart)
     function resetData2() {
         var new_mean_prices = d3                                
                         .nest()
@@ -456,6 +466,8 @@ function generateGraphs() {
                         .object(csv);
         mean_prices = new_mean_prices
     }
+
+    //creates filter for line graph
     function newFilterData1() {
         var filterData = d3
                         .nest()
@@ -472,6 +484,8 @@ function generateGraphs() {
                         .object(csv);
         testData = filterData;
     }
+
+    //craetes filter for bar chart 
     function newFilterData2() {
         var new_mean_prices = d3                                
                         .nest()
@@ -488,6 +502,7 @@ function generateGraphs() {
                         .object(csv);
         mean_prices = new_mean_prices
     }
+
     d3.select(filter1)
         .append('p')
         .append('button')
@@ -498,6 +513,7 @@ function generateGraphs() {
             newFilterData1();
             generateGraphs();
         });
+
     d3.select(filter1)
         .append('p')
         .append('button')
@@ -507,6 +523,7 @@ function generateGraphs() {
             resetData();
             generateGraphs();
         });
+
     d3.select(filter2)
         .append('p')
         .append('button')
@@ -517,6 +534,7 @@ function generateGraphs() {
             newFilterData2();
             generateGraphs();
         });
+
     d3.select(filter2)
         .append('p')
         .append('button')
