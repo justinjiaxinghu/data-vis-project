@@ -3,13 +3,13 @@ var height = 300;
 
 d3.csv("books.csv", function (csv) {
 
-    /* split up x axis so that there's enough space for all 11 years */
+    // split up x axis so that there's enough space for all 11 years
     var xRange = [];
     for (var i = 0; i < 500; i+=(500/11)) {
         xRange.push(i);
     }
 
-    /* domain for x axis aka years that data was recorded */
+    // domain for x axis aka years that data was recorded
     var xDomain = ["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019"];
 
     var testData = d3
@@ -21,7 +21,9 @@ d3.csv("books.csv", function (csv) {
                             return d.Year;
                         })
                         .object(csv);
-    var mean_prices = d3                                //get mean prices
+
+    // get mean prices
+    var mean_prices = d3                                
                         .nest()
                         .key(function(d) { return d.Year})
                         .rollup(function (d) { 
@@ -88,9 +90,6 @@ function generateGraphs() {
         }
         meanPricesMap.push({x : xDomain[i], y : mean_prices[xDomain[i]]});
     }
-    console.log(meanPricesMap);
-    console.log(min_mean);
-    console.log(max_mean);
 
     var xScale = d3.scaleOrdinal().domain(xDomain).range(xRange);
     var xAxis = d3.axisBottom().scale(xScale);
@@ -100,21 +99,31 @@ function generateGraphs() {
 
     var yScale2 = d3.scaleLinear().domain([0, max_mean + 3]).range([200, 20]);
     var yAxis2 = d3.axisLeft().scale(yScale2); 
+
     chart = d3.select("#chart")
                     .append("svg")
                     .attr("width", width)
                     .attr("height", height)
-                    .attr("transform", "translate(20, 10)")
-               chart.append("g") 
-                    .attr("transform", "translate(20, 250)")
+                    .attr("transform", "translate(20, 10)");
+    //x axis
+    chart           .append("g") 
+                    .attr("transform", "translate(55, 200)")
                     .call(xAxis) 
                     .append("text")
                     .attr("class", "label")
                     .attr("x", width - 16)
                     .attr("y", -6)
                     .style("text-anchor", "end");
-               chart.append("g")
-                    .attr("transform", "translate(20, 50)")
+                    
+    //x axis year label
+    chart      
+                    .append("text")
+                    .attr("transform", "translate(290" + ", " + (height - 65) + ")")
+                    .style("font-size", "12px")
+                    .text("Year");    
+    //y axis
+    chart           .append("g")
+                    .attr("transform", "translate(55, 0)")
                     .call(yAxis)
                     .append("text")
                     .attr("class", "label")
@@ -122,27 +131,36 @@ function generateGraphs() {
                     .attr("y", 6)
                     .attr("dy", ".71em")
                     .style("text-anchor", "end");
+    //y axis label
+    chart
+                    .append("text")
+                    .attr("transform", "translate(30" + "," + (height / 2) + "), rotate(-90)")
+                    .style("font-size", "12px")
+                    .text("Number of Books");
+
     var fictionLine = d3.line()
         .x(function(d) { return xScale(d.x);}) // mapping xscale to the data on x-axis
         .y(function(d) { return yScale(d.y);}) // mapping yscale to the data on y-axis
 
     chart.append("path")
         .attr("class", "line")
+        .transition()
         .attr("d", fictionLine(fictionYearMap)) //adding fiction line to chart
-        .attr("transform", "translate(20, 50)")
+        .attr("transform", "translate(55, 0)")
         .style('stroke', 'red') //setting the line color
         .style('fill', 'none');// setting the fill color
+
     var nonFictionLine = d3.line()
         .x(function(d) { return xScale(d.x);}) // mapping xscale to the x-axis
         .y(function(d) { return yScale(d.y);}) // mapping yscale to the y-axis
 
     chart.append("path")
         .attr("class", "line")
-        .attr("d", nonFictionLine(nonFictionYearMap)) //adding non fiction line to chart
-        .attr("transform", "translate(20, 50)")
-        .style('stroke', 'blue')
-        .style('fill', 'none')
         .transition()
+        .attr("d", nonFictionLine(nonFictionYearMap)) //adding non fiction line to chart
+        .attr("transform", "translate(55, 0)")
+        .style('stroke', 'blue')
+        .style('fill', 'none');
         
 
     var fiction_circles = chart
@@ -155,13 +173,6 @@ function generateGraphs() {
         })
         .attr("class", "fiction_circles")
         .attr("fill", "red")
-        .attr("cx", function (d) {
-            return xScale(d.x) + 20;
-        })
-        .attr("cy", function (d) {
-            return yScale(d.y) + 50;
-        })
-        .attr("r", 3)
         .on("mouseover", function(d, i) {
 
             year = d.x
@@ -235,6 +246,17 @@ function generateGraphs() {
             document.getElementById("topFiveBooks5").textContent = ""
         });
 
+    // adding animation for fiction circlecs
+    fiction_circles
+                    .attr("cx", function (d) {
+                        return xScale(d.x) + 55;
+                    })
+                    .transition()
+                    .attr("cy", function (d) {
+                        return yScale(d.y);
+                    })
+                    .attr("r", 3)
+
     var non_fiction_circles = chart
         .selectAll("#non_fiction_circles")
         .data(nonFictionYearMap)
@@ -245,13 +267,6 @@ function generateGraphs() {
         })
         .attr("class", "non_fiction_circles")
         .attr("fill", "blue")
-        .attr("cx", function (d) {
-            return xScale(d.x) + 20;
-        })
-        .attr("cy", function (d) {
-            return yScale(d.y) + 50;
-        })
-        .attr("r", 3)
         .on("mouseover", function(d, i) {
 
             year = d.x
@@ -325,23 +340,34 @@ function generateGraphs() {
             document.getElementById("topFiveBooks5").textContent = ""
         });;
 
-        chart.append("text").attr("x", 520).attr("y", 50).attr("id", "topFiveBooksTitle").text("").style("font-size", "13px").style("font-weight", "bold").attr("alignment-baseline","middle")
-        chart.append("text").attr("x", 520).attr("y", 65).attr("id", "topFiveBooks1").text("").style("font-size", "13px").attr("alignment-baseline","middle")
-        chart.append("text").attr("x", 520).attr("y", 80).attr("id", "topFiveBooks2").text("").style("font-size", "13px").attr("alignment-baseline","middle")
-        chart.append("text").attr("x", 520).attr("y", 95).attr("id", "topFiveBooks3").text("").style("font-size", "13px").attr("alignment-baseline","middle")
-        chart.append("text").attr("x", 520).attr("y", 110).attr("id", "topFiveBooks4").text("").style("font-size", "13px").attr("alignment-baseline","middle")
-        chart.append("text").attr("x", 520).attr("y", 125).attr("id", "topFiveBooks5").text("").style("font-size", "13px").attr("alignment-baseline","middle")
+        //adding animation for non fiction circles
+        non_fiction_circles
+                            .attr("cx", function (d) {
+                                return xScale(d.x) + 55;
+                            })
+                            .transition()
+                            .attr("cy", function (d) {
+                                return yScale(d.y);
+                            })
+                            .attr("r", 3);
 
-    chart2 = d3                         //mean prices bar chart
+        chart.append("text").attr("x", 600).attr("y", 30).attr("id", "topFiveBooksTitle").text("").style("font-size", "13px").style("font-weight", "bold").attr("alignment-baseline","middle")
+        chart.append("text").attr("x", 600).attr("y", 45).attr("id", "topFiveBooks1").text("").style("font-size", "13px").attr("alignment-baseline","middle")
+        chart.append("text").attr("x", 600).attr("y", 60).attr("id", "topFiveBooks2").text("").style("font-size", "13px").attr("alignment-baseline","middle")
+        chart.append("text").attr("x", 600).attr("y", 75).attr("id", "topFiveBooks3").text("").style("font-size", "13px").attr("alignment-baseline","middle")
+        chart.append("text").attr("x", 600).attr("y", 90).attr("id", "topFiveBooks4").text("").style("font-size", "13px").attr("alignment-baseline","middle")
+        chart.append("text").attr("x", 600).attr("y", 105).attr("id", "topFiveBooks5").text("").style("font-size", "13px").attr("alignment-baseline","middle")
+
+    chart2 = d3                         
                     .select("#chart2")
                     .append("svg")
                     .attr("width", width)
                     .attr("height", height)
                     .attr("transform", "translate(20, 10)");
-    
+    //x axis
     chart2
                     .append("g") 
-                    .attr("transform", "translate(50, 200)")
+                    .attr("transform", "translate(70, 200)")
                     .call(xAxis) 
                     .append("text")
                     .attr("class", "label")
@@ -349,9 +375,17 @@ function generateGraphs() {
                     .attr("y", -6)
                     .style("text-anchor", "end");
 
+    //x axis year label
+    chart2      
+                    .append("text")
+                    .attr("transform", "translate(287" + ", " + (height - 65) + ")")
+                    .style("font-size", "12px")
+                    .text("Year");
+    
+    //y axis
     chart2
                     .append("g")
-                    .attr("transform", "translate(20, 0)")
+                    .attr("transform", "translate(55, 0)")
                     .call(yAxis2)
                     .append("text")
                     .attr("class", "label")
@@ -359,7 +393,14 @@ function generateGraphs() {
                     .attr("y", 6)
                     .attr("dy", ".71em")
                     .style("text-anchor", "end");
-
+    
+    //y axis label
+    chart2
+                    .append("text")
+                    .attr("transform", "translate(30" + "," + (height / 2) + "), rotate(-90)")
+                    .style("font-size", "12px")
+                    .text("Mean Price (USD)");
+    
     chart2
     
                     .selectAll(".bar")
@@ -369,20 +410,23 @@ function generateGraphs() {
                     .attr("class", "bar")
                     .attr("fill", "#842db7")
                     .attr("x", function (d) {
-                        return xScale(d.x) + 40;
+                        return xScale(d.x) + 60;
                     })
+                    .attr("width", 20)
+                    .attr("y", yScale2(0))
+                    .attr("height", 0)
+                    .transition()
                     .attr("y", function (d) {
                         return yScale2(d.y);
                     })
-                    .attr("width", 20)
                     .attr("height", function (d) {
                         return height - yScale2(d.y) - 100;
                     })
      // Legend
-     chart.append("circle").attr("cx", 550).attr("cy",170).attr("r", 5).style("fill", "blue")
-     chart.append("circle").attr("cx", 550).attr("cy",190).attr("r", 5).style("fill", "red")
-     chart.append("text").attr("x", 570).attr("y", 170).text("Non-Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
-     chart.append("text").attr("x", 570).attr("y", 190).text("Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
+     chart.append("circle").attr("cx", 600).attr("cy",140).attr("r", 5).style("fill", "blue")
+     chart.append("circle").attr("cx", 600).attr("cy",160).attr("r", 5).style("fill", "red")
+     chart.append("text").attr("x", 620).attr("y", 140).text("Non-Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
+     chart.append("text").attr("x", 620).attr("y", 160).text("Fiction").style("font-size", "13px").attr("alignment-baseline","middle")
 };
     generateGraphs();
     
@@ -401,7 +445,7 @@ function generateGraphs() {
         testData = resetData;
     }
     function resetData2() {
-        var new_mean_prices = d3                                //get mean prices
+        var new_mean_prices = d3                                
                         .nest()
                         .key(function(d) { return d.Year})
                         .rollup(function (d) { 
@@ -429,7 +473,7 @@ function generateGraphs() {
         testData = filterData;
     }
     function newFilterData2() {
-        var new_mean_prices = d3                                //get mean prices
+        var new_mean_prices = d3                                
                         .nest()
                         .key(function(d) {
                             if (Number(d.Price) <= document.getElementById('bookMeanValue').value) { 
