@@ -6,4 +6,5 @@ Built with HTML, D3, Javascript.
 
 Deploy the code by navigating to the index.html file in VSCode and opening with the Live Server Plugin. 
 
-![Alt text] (https://github.com/justinjiaxinghu/data-vis-project/blob/main/screenshot2.JPG)
+![alt text](https://github.com/justinjiaxinghu/data-vis-project/blob/main/screenshot.JPG?raw=true)
+![alt text](https://github.com/justinjiaxinghu/data-vis-project/blob/main/screenshot2.JPG?raw=true)
